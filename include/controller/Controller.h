@@ -10,7 +10,7 @@
 
 class Controller {
 public:
-    virtual Action chooseAction(Character& character) = 0;    // =0 bo musi byc nadpisana w klasie dziedziczacej
+    virtual Action chooseAction(Character& self, Character& enemy) = 0;    // =0 bo musi byc nadpisana w klasie dziedziczacej
     virtual ~Controller() = default;
 };
 

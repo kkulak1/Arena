@@ -1,16 +1,22 @@
 //
-// Created by kamil on 16.03.2026.
+// Created by kamil on 21.03.2026.
 //
 
 #ifndef ARENA_AICONTROLLER_H
 #define ARENA_AICONTROLLER_H
 #include "Controller.h"
-#include "../Action.h"
-#include "../character/Character.h"
 
-class AIController : public Controller{
+
+class AIController : public Controller {
+protected:
+    virtual int getAttackWeight() const = 0;
+    virtual int getDefendWeight() const = 0;
+    virtual int getSpecialActionWeight() const = 0;
+
+    Action pickBest(int attack, int defend, int specialAction);
 public:
-    Action chooseAction(Character& character) override;
+    Action chooseAction(Character &self, Character &enemy) override;
 };
+
 
 #endif //ARENA_AICONTROLLER_H

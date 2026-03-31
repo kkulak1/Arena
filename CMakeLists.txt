@@ -12,14 +12,18 @@ add_executable(arena main.cpp
         include/Action.h
         include/Arena.h
         include/Game.h
-        include/controller/AIController.h
         model/character/Warrior.cpp
         model/character/Archer.cpp
         model/character/Mage.cpp
         model/Game.cpp
         model/Arena.cpp
-        model/controller/AIController.cpp
         include/controller/Controller.h
         model/controller/HumanController.cpp
         include/controller/HumanController.h
+        model/controller/HardAIController.cpp
+        include/controller/HardAIController.h
+        model/controller/AIController.cpp
+        include/controller/AIController.h
+        model/controller/EasyAIController.cpp
+        include/controller/EasyAIController.h
 )

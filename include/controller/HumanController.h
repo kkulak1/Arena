@@ -10,7 +10,7 @@
 
 class HumanController : public Controller {
 public:
-    Action chooseAction(Character& character) override;
+    Action chooseAction(Character& self, Character& enemy) override;
 };
 
 

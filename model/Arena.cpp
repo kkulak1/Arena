@@ -7,7 +7,7 @@
 #include <iostream>
 
 #include "../include/Action.h"
-#include "../include/controller/AIController.h"
+#include "../include/controller/EasyAIController.h"
 
 Arena::Arena(Character *p1, Character *p2, Controller *c1, Controller *c2)
     : player1(p1), player2(p2), controller1(c1), controller2(c2), turn(1) {}
@@ -24,10 +24,11 @@ void Arena::startGame() {
         printStatus();
 
         executeTurn(*player1, *player2, controller1);
-
-        if (!player1->isAlive()) break;
+        if (!player2->isAlive()) break;
 
         executeTurn(*player2, *player1, controller2);
+        if (!player1->isAlive()) break;
+
         turn++;
     }
 
@@ -40,7 +41,7 @@ void Arena::startGame() {
 }
 
 void Arena::executeTurn(Character &attacker, Character &defender, Controller* controller) {
-    Action action = controller->chooseAction(attacker);
+    Action action = controller->chooseAction(attacker, defender);
     executeAction(action, attacker, defender);
 }
 

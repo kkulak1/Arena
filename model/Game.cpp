@@ -10,6 +10,7 @@
 #include "../include/character/Archer.h"
 #include "../include/character/Mage.h"
 #include "../include/character/Warrior.h"
+#include "../include/controller/HardAIController.h"
 #include "../include/controller/HumanController.h"
 
 int Game::showMenu() {
@@ -83,7 +84,7 @@ void Game::startGame() {
     if (mode == 1)
         controller2 = new HumanController();
     else
-        controller2 = new AIController();
+        controller2 = new HardAIController();
 
     Arena arena(player1, player2, controller1, controller2);
 

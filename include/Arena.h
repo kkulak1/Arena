@@ -14,7 +14,6 @@ private:
     Character* player2;
     Controller* controller1;
     Controller* controller2;
-
     int turn;
 
 public:
