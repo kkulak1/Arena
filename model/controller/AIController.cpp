@@ -4,13 +4,13 @@
 
 #include "../../include/controller/AIController.h"
 
-Action AIController::pickBest(int attack, int defend, int specialAction) {
-    if (attack >= defend && attack >= specialAction) return Action::ATTACK;
-    if (defend >= specialAction) return Action::DEFEND;
-    return Action::SPECIAL;
+EAction AIController::pickBest(int attack, int defend, int specialAction) {
+    if (attack >= defend && attack >= specialAction) return EAction::ATTACK;
+    if (defend >= specialAction) return EAction::DEFEND;
+    return EAction::SPECIAL;
 }
 
-Action AIController::chooseAction(Character &self, Character &enemy) {
+EAction AIController::chooseAction(Character &self, Character &enemy) {
     float selfHp = (float) self.getHp() / self.getMaxHp();
     float enemyHp = (float) enemy.getHp() / enemy.getMaxHp();
 

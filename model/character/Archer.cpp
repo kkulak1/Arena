@@ -8,9 +8,12 @@
 Archer::Archer(std::string name)
     : Character(name, 90, 16, 6, 0.25, 0.20) {}
 
+ECharacterType Archer::getCharacterType() const {
+    return ECharacterType::ARCHER;
+}
+
 void Archer::specialAbility(Character &target) {
     std::cout << getName() << " uses DOUBLE SHOT!" << std::endl;
-
     std::cout << getName() << " shoots the first arrow!" << std::endl;
     attackTarget(target);
     std::cout << getName() << " shoots the second arrow!" << std::endl;

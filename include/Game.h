@@ -11,6 +11,7 @@ class Game {
 private:
     int showMenu();
     int chooseMode();
+    Controller* chooseAIDifficulty();
     Character* createCharacter(int playerNumber);
     void startMatch(Arena* arena );
 

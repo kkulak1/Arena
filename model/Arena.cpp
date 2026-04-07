@@ -4,9 +4,11 @@
 
 #include "../include/Arena.h"
 
+#include <fstream>
 #include <iostream>
 
-#include "../include/Action.h"
+#include "../include/EAction.h"
+#include "../include/SaveManager.h"
 #include "../include/controller/EasyAIController.h"
 
 Arena::Arena(Character *p1, Character *p2, Controller *c1, Controller *c2)
@@ -22,6 +24,14 @@ void Arena::startGame() {
     while (player1->isAlive() && player2-> isAlive()) {
         std::cout << "\nTurn " << turn << ":\n";
         printStatus();
+        std::cout << "\nPress 's' to save the game or any other key to continue: ";
+        char choice;
+        std::cin >> choice;
+        if (choice == 's' || choice == 'S') {
+            SaveManager::saveGame(player1, player2, turn);
+            std::cout << "Game saved. Exiting...\n";
+            return;
+        }
 
         executeTurn(*player1, *player2, controller1);
         if (!player2->isAlive()) break;
@@ -41,20 +51,20 @@ void Arena::startGame() {
 }
 
 void Arena::executeTurn(Character &attacker, Character &defender, Controller* controller) {
-    Action action = controller->chooseAction(attacker, defender);
+    EAction action = controller->chooseAction(attacker, defender);
     executeAction(action, attacker, defender);
 }
 
-void Arena::executeAction(Action action, Character &attacker, Character &defender) {
+void Arena::executeAction(EAction action, Character &attacker, Character &defender) {
     switch (action) {
-        case Action::ATTACK:
+        case EAction::ATTACK:
             attacker.attackTarget(defender);
             break;
-        case Action::DEFEND:
+        case EAction::DEFEND:
             attacker.defend();
             std::cout << attacker.getName() << " is defending this turn.\n";
             break;
-        case Action::SPECIAL:
+        case EAction::SPECIAL:
             attacker.specialAbility(defender);
             break;
         default:

@@ -16,9 +16,9 @@ int EasyAIController::getSpecialActionWeight() const {
     return 20;
 }
 
-Action EasyAIController::chooseAction(Character &self, Character &enemy) {
+EAction EasyAIController::chooseAction(Character &self, Character &enemy) {
     if (rand() % 100 < 30) {
-        return static_cast<Action>(rand() % 3); // wybierz losowo
+        return static_cast<EAction>(rand() % 3); // wybierz losowo
     }
     return AIController::chooseAction(self, enemy);
 }

@@ -7,9 +7,11 @@
 #include <iostream>
 
 #include "../include/Arena.h"
+#include "../include/SaveManager.h"
 #include "../include/character/Archer.h"
 #include "../include/character/Mage.h"
 #include "../include/character/Warrior.h"
+#include "../include/controller/EasyAIController.h"
 #include "../include/controller/HardAIController.h"
 #include "../include/controller/HumanController.h"
 
@@ -18,7 +20,8 @@ int Game::showMenu() {
 
     std::cout << "Welcome to the Arena!\n";
     std::cout << "1. Start Game\n";
-    std::cout << "2. Exit\n";
+    std::cout << "2. Load Game\n";
+    std::cout << "3. Exit\n";
 
     std::cin >> choice;
     return choice;
@@ -39,6 +42,23 @@ int Game::chooseMode() {
     } else {
         std::cout << "Invalid choice, defaulting to Player vs AI.\n";
         return 2;
+    }
+}
+
+Controller* Game::chooseAIDifficulty() {
+    std::cout << "Choose AI difficulty:\n";
+    std::cout << "1. Easy\n";
+    std::cout << "2. Hard\n";
+    int choice;
+    std::cin >> choice;
+
+    if (choice == 1) {
+        return new EasyAIController();
+    } else if (choice == 2) {
+        return new HardAIController();
+    } else {
+        std::cout << "Invalid choice, defaulting to Easy AI.\n";
+        return new EasyAIController();
     }
 }
 
@@ -68,9 +88,12 @@ Character *Game::createCharacter(int playerNumber) {
 void Game::startGame() {
     int menu = showMenu();
 
-    if (menu != 1) {
+    if (menu == 1) {
         std::cout << "Exiting game. Goodbye!\n";
         return;
+    }
+    if (menu == 2) {
+        SaveManager::loadGame(nullptr, nullptr, 0);
     }
 
     int mode = chooseMode();
@@ -83,8 +106,9 @@ void Game::startGame() {
 
     if (mode == 1)
         controller2 = new HumanController();
-    else
-        controller2 = new HardAIController();
+    else {
+        controller2 = chooseAIDifficulty();
+    }
 
     Arena arena(player1, player2, controller1, controller2);
 

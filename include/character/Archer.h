@@ -9,7 +9,7 @@
 class Archer : public Character {
 public:
     Archer(std::string name);
-
+    ECharacterType getCharacterType() const override;
     void specialAbility(Character &target) override;
 };
 

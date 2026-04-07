@@ -16,9 +16,9 @@ int HardAIController::getSpecialActionWeight() const {
     return 50;
 }
 
-Action HardAIController::chooseAction(Character &self, Character &enemy) {
+EAction HardAIController::chooseAction(Character &self, Character &enemy) {
     if (enemy.getHp() <= self.getAttack()) {
-        return Action::ATTACK;  // zawsze dobija
+        return EAction::ATTACK;  // zawsze dobija
     }
     return AIController::chooseAction(self, enemy);
 }

@@ -5,12 +5,12 @@
 #ifndef ARENA_HUMANCONTROLLER_H
 #define ARENA_HUMANCONTROLLER_H
 #include "Controller.h"
-#include "../Action.h"
+#include "../EAction.h"
 
 
 class HumanController : public Controller {
 public:
-    Action chooseAction(Character& self, Character& enemy) override;
+    EAction chooseAction(Character& self, Character& enemy) override;
 };
 
 

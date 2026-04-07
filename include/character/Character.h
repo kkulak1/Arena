@@ -6,6 +6,8 @@
 #define ARENA_CHARACTER_H
 #include <string>
 
+#include "../ECharacterType.h"
+
 class Character {
 private:
     std::string name;
@@ -38,6 +40,7 @@ public:
 
     void setHealth(int h);
     void setAttack(int a);
+    virtual ECharacterType getCharacterType() const = 0;
 };
 
 #endif //ARENA_CHARACTER_H

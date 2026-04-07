@@ -13,9 +13,9 @@ protected:
     virtual int getDefendWeight() const = 0;
     virtual int getSpecialActionWeight() const = 0;
 
-    Action pickBest(int attack, int defend, int specialAction);
+    EAction pickBest(int attack, int defend, int specialAction);
 public:
-    Action chooseAction(Character &self, Character &enemy) override;
+    EAction chooseAction(Character &self, Character &enemy) override;
 };
 
 

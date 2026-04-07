@@ -5,7 +5,7 @@
 #ifndef ARENA_ACTION_H
 #define ARENA_ACTION_H
 
-enum class Action {
+enum class EAction {
     ATTACK,
     DEFEND,
     SPECIAL

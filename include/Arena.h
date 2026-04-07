@@ -4,7 +4,7 @@
 
 #ifndef ARENA_ARENA_H
 #define ARENA_ARENA_H
-#include "Action.h"
+#include "EAction.h"
 #include "character/Character.h"
 #include "controller/Controller.h"
 
@@ -21,7 +21,7 @@ public:
 
     void startGame();
     void executeTurn(Character& attacker, Character& defender, Controller* controller);
-    void executeAction(Action action, Character& attacker, Character& defender);
+    void executeAction(EAction action, Character& attacker, Character& defender);
     void printStatus() const;
 };
 

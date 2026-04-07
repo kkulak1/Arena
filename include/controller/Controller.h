@@ -4,13 +4,13 @@
 
 #ifndef ARENA_CONTROLLER_H
 #define ARENA_CONTROLLER_H
-#include "../Action.h"
+#include "../EAction.h"
 #include "../character/Character.h"
 
 
 class Controller {
 public:
-    virtual Action chooseAction(Character& self, Character& enemy) = 0;    // =0 bo musi byc nadpisana w klasie dziedziczacej
+    virtual EAction chooseAction(Character& self, Character& enemy) = 0;    // =0 bo musi byc nadpisana w klasie dziedziczacej
     virtual ~Controller() = default;
 };
 

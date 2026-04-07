@@ -8,6 +8,10 @@
 Mage::Mage(std::string name)
     : Character(name, 80, 22, 5, 0.15, 0.15) {}
 
+ECharacterType Mage::getCharacterType() const {
+    return ECharacterType::MAGE;
+}
+
 void Mage::specialAbility(Character &target) {
     std::cout << getName() << " casts FIREBALL!" << std::endl;
     int reducedDefense = target.getDefense() / 2;

@@ -8,6 +8,10 @@
 Warrior::Warrior(std::string name)
     : Character(name, 120, 18, 10, 0.15, 0.05) {}
 
+ECharacterType Warrior::getCharacterType() const {
+    return ECharacterType::WARRIOR;
+}
+
 void Warrior::specialAbility(Character &target) {
     int damage = getAttack() * 2;
 

@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-Action HumanController::chooseAction(Character &character, Character& enemy) {
+EAction HumanController::chooseAction(Character &character, Character& enemy) {
     int choice;
 
     std::cout << character.getName() << ", choose action:\n";
@@ -16,9 +16,9 @@ Action HumanController::chooseAction(Character &character, Character& enemy) {
     std::cin >> choice;
 
     switch (choice) {
-        case 1: return Action::ATTACK;
-        case 2: return Action::DEFEND;
-        case 3: return Action::SPECIAL;
-        default: return Action::ATTACK;
+        case 1: return EAction::ATTACK;
+        case 2: return EAction::DEFEND;
+        case 3: return EAction::SPECIAL;
+        default: return EAction::ATTACK;
     }
 }
