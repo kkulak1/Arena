@@ -5,7 +5,7 @@
 #ifndef ARENA_MAGE_H
 #define ARENA_MAGE_H
 #include "Character.h"
-#include "../ECharacterType.h"
+#include "../types/ECharacterType.h"
 
 class Mage : public Character {
 public:

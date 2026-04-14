@@ -4,7 +4,7 @@
 
 #ifndef ARENA_ARENA_H
 #define ARENA_ARENA_H
-#include "EAction.h"
+#include "types/TurnDecision.h"
 #include "character/Character.h"
 #include "controller/Controller.h"
 
@@ -15,9 +15,15 @@ private:
     Controller* controller1;
     Controller* controller2;
     int turn;
+    int mode = 2;
+    int aiDifficulty = 1;
+
+    bool shouldExit = false;
+
+    void saveCurrentGame();
 
 public:
-    Arena(Character* p1, Character* p2, Controller* c1, Controller* c2);
+    Arena(Character* p1, Character* p2, Controller* c1, Controller* c2, int startTurn = 1, int mode = 2, int aiDifficulty = 1);
 
     void startGame();
     void executeTurn(Character& attacker, Character& defender, Controller* controller);

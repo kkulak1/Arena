@@ -6,7 +6,7 @@
 #define ARENA_CHARACTER_H
 #include <string>
 
-#include "../ECharacterType.h"
+#include "../types/ECharacterType.h"
 
 class Character {
 private:

@@ -6,16 +6,17 @@
 #define ARENA_SAVEMANAGER_H
 #include <vector>
 
-#include "GameState.h"
+#include "types/GameState.h"
 #include "character/Character.h"
 
 
 class SaveManager {
 public:
-    static void saveGame(Character* p1, Character* p2, int turn);
+    static void saveGame(Character* p1, Character* p2, int turn, int mode, int aiDifficulty, const std::string& filename);
     static std::string chooseSave();
-    static GameState loadGame(Character*& p1, Character*& p2, int& turn);
+    static GameState loadGame();
 private:
+    static std::string savesDirectory;
     static std::vector<std::string> listSaves();
 };
 

@@ -5,12 +5,12 @@
 #ifndef ARENA_HUMANCONTROLLER_H
 #define ARENA_HUMANCONTROLLER_H
 #include "Controller.h"
-#include "../EAction.h"
+#include "../types/EAction.h"
 
 
 class HumanController : public Controller {
 public:
-    EAction chooseAction(Character& self, Character& enemy) override;
+    TurnDecision decideTurn(Character& self, Character& enemy) override;
 };
 
 

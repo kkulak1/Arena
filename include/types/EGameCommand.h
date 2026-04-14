@@ -1,0 +1,13 @@
+//
+// Created by kamil on 13.04.2026.
+//
+
+#ifndef ARENA_EGAMECOMMAND_H
+#define ARENA_EGAMECOMMAND_H
+
+enum class EGameCommand {
+    NONE,
+    SAVE_AND_EXIT
+};
+
+#endif //ARENA_EGAMECOMMAND_H

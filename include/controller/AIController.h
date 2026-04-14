@@ -15,7 +15,8 @@ protected:
 
     EAction pickBest(int attack, int defend, int specialAction);
 public:
-    EAction chooseAction(Character &self, Character &enemy) override;
+    TurnDecision decideTurn(Character &self, Character &enemy) override;
+    EAction chooseAction(Character &self, Character &enemy);
 };
 
 

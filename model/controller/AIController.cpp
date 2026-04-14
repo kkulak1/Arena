@@ -27,3 +27,9 @@ EAction AIController::chooseAction(Character &self, Character &enemy) {
 
     return pickBest(attackScore, defendScore, specialScore);
 }
+
+TurnDecision AIController::decideTurn(Character &self, Character &enemy) {
+    TurnDecision d;
+    d.action = chooseAction(self, enemy);
+    return d;
+}

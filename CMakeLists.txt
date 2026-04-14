@@ -9,7 +9,7 @@ add_executable(arena main.cpp
         include/character/Warrior.h
         include/character/Mage.h
         include/character/Archer.h
-        include/EAction.h
+        include/types/EAction.h
         include/Arena.h
         include/Game.h
         model/character/Warrior.cpp
@@ -28,6 +28,9 @@ add_executable(arena main.cpp
         include/controller/EasyAIController.h
         model/SaveManager.cpp
         include/SaveManager.h
-        include/GameState.h
-        include/ECharacterType.h
+        include/types/GameState.h
+        include/types/ECharacterType.h
+        include/types/EGameCommand.h
+        model/ConsoleRenderer.cpp
+        include/ConsoleRenderer.h
 )

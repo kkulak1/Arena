@@ -14,7 +14,7 @@ protected:
     int getDefendWeight() const override;
     int getSpecialActionWeight() const override;
 public:
-    EAction chooseAction(Character &self, Character &enemy) override;
+    EAction chooseAction(Character &self, Character &enemy);
 };
 
 

@@ -14,6 +14,17 @@
 #include "../include/controller/EasyAIController.h"
 #include "../include/controller/HardAIController.h"
 #include "../include/controller/HumanController.h"
+#include "windows.h"
+
+namespace {
+    void enableANSI() {     // enables colors
+        HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+        DWORD dwMode = 0;
+        GetConsoleMode(hOut, &dwMode);
+        dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+        SetConsoleMode(hOut, dwMode);
+    }
+}
 
 int Game::showMenu() {
     int choice;
@@ -86,32 +97,62 @@ Character *Game::createCharacter(int playerNumber) {
 }
 
 void Game::startGame() {
+    enableANSI();
     int menu = showMenu();
 
-    if (menu == 1) {
+    if (menu == 3) {
         std::cout << "Exiting game. Goodbye!\n";
         return;
     }
-    if (menu == 2) {
-        SaveManager::loadGame(nullptr, nullptr, 0);
-    }
 
-    int mode = chooseMode();
-
-    Character *player1 = createCharacter(1);
-    Character *player2 = createCharacter(2);
+    Character *player1 = nullptr;
+    Character *player2 = nullptr;
+    int turn = 1;
+    int mode = 2;
+    int aiDifficulty = 1;
 
     Controller* controller1 = new HumanController();
-    Controller* controller2;
+    Controller* controller2 = nullptr;
 
-    if (mode == 1)
-        controller2 = new HumanController();
-    else {
-        controller2 = chooseAIDifficulty();
+    if (menu == 2) {
+        GameState state = SaveManager::loadGame();
+        if (state.p1 == nullptr || state.p2 == nullptr) {   // if fails to load save exit game
+            std::cout << "Load failed. Exiting game.\n";
+            delete controller1;
+            delete controller2;
+            delete player1;
+            delete player2;
+            return;
+        }
+        player1 = state.p1;
+        player2 = state.p2;
+        turn = state.turn;
+        mode = state.mode;
+        aiDifficulty = state.aiDifficulty;
+
+        if (mode == 1) {
+            controller2 = new HumanController();
+        } else {
+            controller2 = (aiDifficulty == 2) ? static_cast<Controller*>(new HardAIController())
+                                             : static_cast<Controller*>(new EasyAIController());
+        }
+    } else {
+        // New game
+        mode = chooseMode();
+        player1 = createCharacter(1);
+        player2 = createCharacter(2);
+
+        if (mode == 1) {
+            aiDifficulty = 0;
+            controller2 = new HumanController();
+        } else {
+            Controller* ai = chooseAIDifficulty();
+            aiDifficulty = dynamic_cast<HardAIController*>(ai) ? 2 : 1;
+            controller2 = ai;
+        }
     }
 
-    Arena arena(player1, player2, controller1, controller2);
-
+    Arena arena(player1, player2, controller1, controller2, turn, mode, aiDifficulty);
     startMatch(&arena);
 
     delete controller1;
