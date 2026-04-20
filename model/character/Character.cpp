@@ -3,12 +3,15 @@
 //
 
 #include "../../include/character/Character.h"
+#include "../../include/ConsoleRenderer.h"
+#include "../../include/types/Color.h"
 
-#include <iostream>
 #include <string>
+#include <utility>
 
-Character::Character(std::string name, int hp, int attack, int defense, double critChance, double dodgeChance)
-    : name(name),
+Character::Character(std::string name, int teamId, int hp, int attack, int defense, double critChance, double dodgeChance)
+    : name(std::move(name)),
+    teamId(teamId),
     hp(hp),
     maxHp(hp),
     attack(attack),
@@ -38,7 +41,7 @@ void Character::takeDamage(int damage) {
 void Character::attackTarget(Character &target) {
     double dodgeRoll = (double) rand() / RAND_MAX;
     if (dodgeRoll < target.getDodgeChance()) {
-        std::cout << target.getName() << " dodged the attack!\n";
+        ConsoleRenderer::printMessage(target.getName() + " dodged the attack!", Color::Default, &target);
         return;
     }
 
@@ -50,12 +53,12 @@ void Character::attackTarget(Character &target) {
 
     if (double critRoll = (double) rand() / RAND_MAX; critRoll < critChance) {
         damage *= 2;
-        std::cout << "Critical hit";
+        ConsoleRenderer::printMessage("Critical hit", Color::Default);
     }
 
     target.takeDamage(damage);
 
-    std::cout << name << " deals " << damage << " damage to " << target.getName() << std::endl;
+    ConsoleRenderer::printMessage(name + " deals " + std::to_string(damage) + " damage to " + target.getName(), Color::Default, this);
 }
 
 
@@ -85,6 +88,14 @@ int Character::getMaxHp() const {
 
 std::string Character::getName() const {
     return name;
+}
+
+int Character::getTeamId() const {
+    return teamId;
+}
+
+void Character::setTeamId(int id) {
+    teamId = id;
 }
 
 double Character::getDodgeChance() const {

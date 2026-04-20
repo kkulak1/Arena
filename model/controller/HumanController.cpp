@@ -6,14 +6,13 @@
 
 #include <iostream>
 
+#include "../../include/ConsoleRenderer.h"
+
 TurnDecision HumanController::decideTurn(Character &character, Character& enemy) {
     int choice;
 
-    std::cout << character.getName() << ", choose action:\n";
-    std::cout << "1. Attack\n";
-    std::cout << "2. Defend\n";
-    std::cout << "3. Special Ability\n";
-    std::cout << "4. Save game\n";
+    ConsoleRenderer::printMessage("\n" + character.getName() + " choose action:", Color::Default, &character);
+    ConsoleRenderer::printMessage("1. Attack\n2. Defend\n3. Special Ability\n4. Save game\n", Color::Default, &character);
     std::cin >> choice;
 
     TurnDecision result;

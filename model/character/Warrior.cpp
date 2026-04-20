@@ -3,10 +3,13 @@
 //
 
 #include "../../include/character/Warrior.h"
-#include <iostream>
+#include "../../include/ConsoleRenderer.h"
+#include "../../include/types/Color.h"
+
+#include <utility>
 
 Warrior::Warrior(std::string name)
-    : Character(name, 120, 18, 10, 0.15, 0.05) {}
+    : Character(std::move(name), 1, 120, 18, 10, 0.15, 0.05) {}
 
 ECharacterType Warrior::getCharacterType() const {
     return ECharacterType::WARRIOR;
@@ -15,9 +18,9 @@ ECharacterType Warrior::getCharacterType() const {
 void Warrior::specialAbility(Character &target) {
     int damage = getAttack() * 2;
 
-    std::cout << getName() << " uses POWER STRIKE!" << std::endl;
+    ConsoleRenderer::printMessage(getName() + " uses POWER STRIKE!", Color::Default, this);
 
     target.takeDamage(damage);
 
-    std::cout << target.getName() << " gets damage " << std::endl;
+    ConsoleRenderer::printMessage(target.getName() + " gets damage", Color::Default, &target);
 }
