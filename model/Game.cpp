@@ -32,7 +32,7 @@ namespace {
         }
 
         if (std::cin.eof()) {
-            value = 3; // traktuj EOF jak polecenie wyjscia
+            value = 3;
             return true;
         }
 
