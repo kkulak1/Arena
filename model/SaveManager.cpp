@@ -7,9 +7,12 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <limits>
+#include "../include/ConsoleRenderer.h"
 #include "../include/character/Warrior.h"
 #include "../include/character/Mage.h"
 #include "../include/character/Archer.h"
+#include "../include/types/Color.h"
 
 namespace {
     struct SaveData {
@@ -47,7 +50,7 @@ void SaveManager::saveGame(Character *p1, Character *p2, int turn, int mode, int
     const std::filesystem::path filePath = getSaveDir() / (filename + ".txt");
     std::ofstream file(filePath);
     if (!file) {
-        std::cout << "Error while saving to: " << filePath << "\n";
+        ConsoleRenderer::printMessage("Error while saving to: " + filePath.string(), Color::Default);
         return;
     }
 
@@ -57,27 +60,34 @@ void SaveManager::saveGame(Character *p1, Character *p2, int turn, int mode, int
 
     file.close();
 
-    std::cout << "Game saved successfully!\n";
+    ConsoleRenderer::printMessage("Game saved successfully!", Color::Default);
 }
 
 std::string SaveManager::chooseSave() {
     const std::vector<std::string> saves = listSaves();
-    int choice;
+    int choice = -1;
 
     if (saves.empty()) {
-        std::cout << "No saves found!\n";
+        ConsoleRenderer::printMessage("No saves found!", Color::Default);
         return "";
     }
 
-    std::cout << "Available saves:\n";
+    ConsoleRenderer::printMessage("Available saves:", Color::Default);
     for (int i = 0; i < saves.size(); i++) {
-        std::cout << i + 1 << "." << saves[i] << "\n";
+        ConsoleRenderer::printMessage(std::to_string(i + 1) + "." + saves[i], Color::Default);
     }
 
-    std::cout << "Choose a save to load: ";
-    std::cin >> choice;
+    ConsoleRenderer::printMessage("\nChoose a save to load:", Color::Default);
+    if (!(std::cin >> choice)) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        ConsoleRenderer::printMessage("Invalid choice!", Color::Default);
+        return "";
+    }
+
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     if (choice < 1 || choice > saves.size()) {
-        std::cout << "Invalid choice!\n";
+        ConsoleRenderer::printMessage("Invalid choice!", Color::Default);
         return "";
     }
 
@@ -92,13 +102,13 @@ GameState SaveManager::loadGame() {
 
     std::ifstream file(path);
     if (!file) {
-        std::cout << "Could not open save file: " << path << "\n";
+        ConsoleRenderer::printMessage("Could not open save file: " + path, Color::Default);
         return {};
     }
 
     SaveData data;
     if (!readSaveData(file, data)) {
-        std::cout << "Save file is corrupted: " << path << "\n";
+        ConsoleRenderer::printMessage("Save file is corrupted: " + path, Color::Default);
         return {};
     }
 
@@ -110,7 +120,8 @@ GameState SaveManager::loadGame() {
     state.p2 = createCharacterFromString(data.type2);
 
     if (state.p1 == nullptr || state.p2 == nullptr) {
-        std::cout << "Save file contains unknown character type(s): " << data.type1 << ", " << data.type2 << "\n";
+        ConsoleRenderer::printMessage("Save file contains unknown character type(s): " + data.type1 + ", " + data.type2,
+                                      Color::Default);
         delete state.p1;
         delete state.p2;
         return {};

@@ -3,19 +3,22 @@
 //
 
 #include "../../include/character/Archer.h"
-#include <iostream>
+#include "../../include/ConsoleRenderer.h"
+#include "../../include/types/Color.h"
+
+#include <utility>
 
 Archer::Archer(std::string name)
-    : Character(name, 90, 16, 6, 0.25, 0.20) {}
+    : Character(std::move(name), 1, 90, 16, 6, 0.25, 0.20) {}
 
 ECharacterType Archer::getCharacterType() const {
     return ECharacterType::ARCHER;
 }
 
 void Archer::specialAbility(Character &target) {
-    std::cout << getName() << " uses DOUBLE SHOT!" << std::endl;
-    std::cout << getName() << " shoots the first arrow!" << std::endl;
+    ConsoleRenderer::printMessage(getName() + " uses DOUBLE SHOT!" , Color::Default, this);
+    ConsoleRenderer::printMessage(getName() + " shoots the first arrow!", Color::Default, this);
     attackTarget(target);
-    std::cout << getName() << " shoots the second arrow!" << std::endl;
+    ConsoleRenderer::printMessage(getName() + " shoots the second arrow!", Color::Default, this);
     attackTarget(target);
 }

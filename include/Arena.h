@@ -4,6 +4,7 @@
 
 #ifndef ARENA_ARENA_H
 #define ARENA_ARENA_H
+#include "ConsoleRenderer.h"
 #include "types/TurnDecision.h"
 #include "character/Character.h"
 #include "controller/Controller.h"

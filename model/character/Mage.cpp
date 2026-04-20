@@ -3,21 +3,24 @@
 //
 
 #include  "../../include/character/Mage.h"
-#include <iostream>
+#include "../../include/ConsoleRenderer.h"
+#include "../../include/types/Color.h"
+
+#include <utility>
 
 Mage::Mage(std::string name)
-    : Character(name, 80, 22, 5, 0.15, 0.15) {}
+    : Character(std::move(name), 1, 80, 22, 5, 0.15, 0.15) {}
 
 ECharacterType Mage::getCharacterType() const {
     return ECharacterType::MAGE;
 }
 
 void Mage::specialAbility(Character &target) {
-    std::cout << getName() << " casts FIREBALL!" << std::endl;
+    ConsoleRenderer::printMessage(getName() + " casts FIREBALL!", Color::Default, this);
     int reducedDefense = target.getDefense() / 2;
     int damage = getAttack() + reducedDefense;
 
     target.takeDamage(damage);
 
-    std::cout << getName() << " takes " << damage << " damage with FIREBALL!" << std::endl;
+    ConsoleRenderer::printMessage(getName() + " takes " + std::to_string(damage) + " damage with FIREBALL!", Color::Default, this);
 }

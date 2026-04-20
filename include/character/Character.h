@@ -11,6 +11,7 @@
 class Character {
 private:
     std::string name;
+    int teamId;
     int hp;
     int maxHp;
     int attack;
@@ -20,11 +21,13 @@ private:
     double dodgeChance;
 
 public:
-    Character(std::string name, int hp, int attack, int defense, double critChance, double dodgeChance);
+    Character(std::string name, int teamId, int hp, int attack, int defense, double critChance, double dodgeChance);
     virtual ~Character() = default;
     virtual void specialAbility(Character& target) = 0;
 
     std::string getName() const;
+    int getTeamId() const;
+    void setTeamId(int id);
     int getHp() const;
     int getMaxHp() const;
     int getAttack() const;
@@ -36,8 +39,6 @@ public:
     void defend();
     void takeDamage(int damage);
     void attackTarget(Character& target);
-
-
     void setHealth(int h);
     void setAttack(int a);
     virtual ECharacterType getCharacterType() const = 0;
