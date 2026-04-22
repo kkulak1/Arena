@@ -14,12 +14,27 @@ TEST_CASE("Mage: konstruktor ustawia statystyki bazowe", "[character][mage]") {
     REQUIRE(m.getDefense() == 5);
 }
 
-TEST_CASE("Mage::specialAbility zadaje attack + (defense/2) celu", "[character][mage]") {
+TEST_CASE("Mage::specialAbility zwraca attack + (defense/2) celu", "[character][mage]") {
     Mage m("M");
     // target defense = 10 -> reducedDefense = 5
     TestCharacter target("T", 2, 100, 1, 10, 0.0, 0.0);
 
-    m.specialAbility(target);
-    REQUIRE(target.getHp() == 100 - (m.getAttack() + (10 / 2)));
+    const int damage = m.specialAbility(target);
+    REQUIRE(damage == m.getAttack() + (10 / 2));
+}
+
+TEST_CASE("Mage::specialAbility ucina defense/2 do int dla nieparzystej obrony", "[character][mage]") {
+    Mage m("M");
+    TestCharacter target("T", 2, 100, 1, 9, 0.0, 0.0);
+
+    const int damage = m.specialAbility(target);
+    REQUIRE(damage == m.getAttack() + 4);
+}
+
+TEST_CASE("Mage ma cooldown speciala rowny 3 tury", "[character][mage]") {
+    Mage m("M");
+
+    m.startSpecialCooldown();
+    REQUIRE(m.getSpecialCooldownRemaining() == 3);
 }
 

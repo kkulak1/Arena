@@ -40,7 +40,8 @@ add_library(arena_lib
 target_include_directories(arena_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # --- Application ---
-add_executable(arena main.cpp)
+add_executable(arena main.cpp
+        include/templates/WeightedPicker.h)
 target_link_libraries(arena PRIVATE arena_lib)
 
 # --- Tests ---

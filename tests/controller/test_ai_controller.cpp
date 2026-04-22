@@ -54,3 +54,54 @@ TEST_CASE("AIController::chooseAction preferuje ATTACK gdy enemyHP < 0.25", "[co
     REQUIRE(c.chooseAction(self, enemy) == EAction::ATTACK);
 }
 
+TEST_CASE("AIController::chooseAction nie wybiera SPECIAL na cooldownie", "[controller][ai]") {
+    class SpecialHeavyAI final : public AIController {
+    protected:
+        int getAttackWeight() const override { return 10; }
+        int getDefendWeight() const override { return 10; }
+        int getSpecialActionWeight() const override { return 100; }
+    } c;
+
+    TestCharacter self("Self", 1, 100, 10, 0, 0.0, 0.0);
+    self.configureSpecialCooldown(2);
+    self.startSpecialCooldown();
+
+    TestCharacter enemy("Enemy", 2, 100, 10, 0, 0.0, 0.0);
+
+    REQUIRE(c.chooseAction(self, enemy) != EAction::SPECIAL);
+}
+
+TEST_CASE("AIController::chooseAction nie dodaje bonusu DEFEND dla selfHP == 0.3", "[controller][ai]") {
+    class BoundarySelfHpAI final : public AIController {
+    protected:
+        int getAttackWeight() const override { return 20; }
+        int getDefendWeight() const override { return 19; }
+        int getSpecialActionWeight() const override { return 0; }
+    } c;
+
+    TestCharacter self("Self", 1, 100, 10, 0, 0.0, 0.0);
+    self.setHealth(30);
+    TestCharacter enemy("Enemy", 2, 100, 10, 0, 0.0, 0.0);
+    self.configureSpecialCooldown(2);
+    self.startSpecialCooldown();
+
+    REQUIRE(c.chooseAction(self, enemy) == EAction::ATTACK);
+}
+
+TEST_CASE("AIController::chooseAction nie dodaje bonusu ATTACK dla enemyHP == 0.25", "[controller][ai]") {
+    class BoundaryEnemyHpAI final : public AIController {
+    protected:
+        int getAttackWeight() const override { return 10; }
+        int getDefendWeight() const override { return 30; }
+        int getSpecialActionWeight() const override { return 0; }
+    } c;
+
+    TestCharacter self("Self", 1, 100, 10, 0, 0.0, 0.0);
+    self.configureSpecialCooldown(2);
+    self.startSpecialCooldown();
+    TestCharacter enemy("Enemy", 2, 100, 10, 0, 0.0, 0.0);
+    enemy.setHealth(25);
+
+    REQUIRE(c.chooseAction(self, enemy) == EAction::DEFEND);
+}
+

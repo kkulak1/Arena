@@ -85,7 +85,7 @@ std::string SaveManager::chooseSave() {
         return "";
     }
 
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');     //TODO: duplication
     if (choice < 1 || choice > saves.size()) {
         ConsoleRenderer::printMessage("Invalid choice!", Color::Default);
         return "";

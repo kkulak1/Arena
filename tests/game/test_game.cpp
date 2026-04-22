@@ -74,6 +74,17 @@ TEST_CASE("Game::startGame konczy dla opcji Exit", "[game]") {
     REQUIRE(captured.str().find("Exiting game. Goodbye!") != std::string::npos);
 }
 
+TEST_CASE("Game::startGame po blednym menu dalej pozwala wybrac Exit", "[game]") {
+    ScopedCin input("x\n3\n");
+    ScopedCout captured;
+
+    Game game;
+    game.startGame();
+
+    REQUIRE(captured.str().find("Invalid input. Please enter a number.") != std::string::npos);
+    REQUIRE(captured.str().find("Exiting game. Goodbye!") != std::string::npos);
+}
+
 TEST_CASE("Game::startGame wypisuje blad gdy load sie nie powiedzie", "[game]") {
     ScopedCurrentPath cwd;
     ScopedCin input("2\n");
@@ -83,7 +94,7 @@ TEST_CASE("Game::startGame wypisuje blad gdy load sie nie powiedzie", "[game]") 
     game.startGame();
 
     REQUIRE(captured.str().find("No saves found!") != std::string::npos);
-    REQUIRE(captured.str().find("Load failed. Exiting game.") != std::string::npos);
+    REQUIRE(captured.str().find("Load failed. Returning to menu.") != std::string::npos);
 }
 
 TEST_CASE("Game::startGame nowa gra pozwala zapisac i wyjsc", "[game]") {
@@ -125,6 +136,24 @@ TEST_CASE("Game::startGame niepoprawny tryb domyslnie ustawia Player vs AI", "[g
     REQUIRE(captured.str().find("Invalid choice, defaulting to Player vs AI.") != std::string::npos);
 }
 
+TEST_CASE("Game::startGame nienumeryczny tryb domyslnie ustawia Player vs AI", "[game]") {
+    ScopedCurrentPath cwd;
+    ScopedCin input("1\nabc\n1\n1\n1\n4\nmode_alpha\n");
+    ScopedCout captured;
+
+    Game game;
+    game.startGame();
+
+    const auto savePath = std::filesystem::current_path() / "saves" / "mode_alpha.txt";
+    REQUIRE(std::filesystem::exists(savePath));
+
+    std::ifstream in(savePath);
+    std::string header;
+    std::getline(in, header);
+    REQUIRE(header == "1 2 1");
+    REQUIRE(captured.str().find("Invalid choice, defaulting to Player vs AI.") != std::string::npos);
+}
+
 TEST_CASE("Game::startGame niepoprawna trudnosc AI domyslnie ustawia Easy", "[game]") {
     ScopedCurrentPath cwd;
     ScopedCin input("1\n2\n1\n1\n9\n4\nai_default\n");
@@ -134,6 +163,24 @@ TEST_CASE("Game::startGame niepoprawna trudnosc AI domyslnie ustawia Easy", "[ga
     game.startGame();
 
     const auto savePath = std::filesystem::current_path() / "saves" / "ai_default.txt";
+    REQUIRE(std::filesystem::exists(savePath));
+
+    std::ifstream in(savePath);
+    std::string header;
+    std::getline(in, header);
+    REQUIRE(header == "1 2 1");
+    REQUIRE(captured.str().find("Invalid choice, defaulting to Easy AI.") != std::string::npos);
+}
+
+TEST_CASE("Game::startGame nienumeryczna trudnosc AI domyslnie ustawia Easy", "[game]") {
+    ScopedCurrentPath cwd;
+    ScopedCin input("1\n2\n1\n1\nq\n4\nai_alpha\n");
+    ScopedCout captured;
+
+    Game game;
+    game.startGame();
+
+    const auto savePath = std::filesystem::current_path() / "saves" / "ai_alpha.txt";
     REQUIRE(std::filesystem::exists(savePath));
 
     std::ifstream in(savePath);
@@ -168,17 +215,29 @@ TEST_CASE("Game::startGame niepoprawna postac domyslnie wybiera Warrior", "[game
     REQUIRE(captured.str().find("Invalid choice, defaulting to Warrior.") != std::string::npos);
 }
 
-TEST_CASE("Game::startGame nieznany wybor menu przechodzi sciezke nowej gry", "[game]") {
+TEST_CASE("Game::startGame nienumeryczna postac domyslnie wybiera Warrior", "[game]") {
     ScopedCurrentPath cwd;
-    ScopedCin input("99\n1\n1\n1\n4\nmenu_default\n");
+    ScopedCin input("1\n1\nabc\n2\n4\nchar_alpha\n");
     ScopedCout captured;
 
     Game game;
     game.startGame();
 
-    const auto savePath = std::filesystem::current_path() / "saves" / "menu_default.txt";
+    const auto savePath = std::filesystem::current_path() / "saves" / "char_alpha.txt";
     REQUIRE(std::filesystem::exists(savePath));
-    REQUIRE(captured.str().find("Game saved. Exiting...") != std::string::npos);
+
+    std::ifstream in(savePath);
+    std::string line1;
+    std::string line2;
+    std::string line3;
+    std::getline(in, line1);
+    std::getline(in, line2);
+    std::getline(in, line3);
+
+    REQUIRE(line1 == "1 1 0");
+    REQUIRE(line2 == "Warrior 120");
+    REQUIRE(line3 == "Mage 80");
+    REQUIRE(captured.str().find("Invalid choice, defaulting to Warrior.") != std::string::npos);
 }
 
 TEST_CASE("Game::startGame load poprawnego save zachowuje naglowek po zapisie", "[game]") {
@@ -210,7 +269,7 @@ TEST_CASE("Game::startGame load uszkodzonego save konczy gre", "[game]") {
     game.startGame();
 
     REQUIRE(captured.str().find("Save file is corrupted") != std::string::npos);
-    REQUIRE(captured.str().find("Load failed. Exiting game.") != std::string::npos);
+    REQUIRE(captured.str().find("Load failed. Returning to menu.") != std::string::npos);
 }
 
 TEST_CASE("Game::startGame load save z nieznanym typem postaci konczy gre", "[game]") {
@@ -223,6 +282,6 @@ TEST_CASE("Game::startGame load save z nieznanym typem postaci konczy gre", "[ga
     game.startGame();
 
     REQUIRE(captured.str().find("unknown character type") != std::string::npos);
-    REQUIRE(captured.str().find("Load failed. Exiting game.") != std::string::npos);
+    REQUIRE(captured.str().find("Load failed. Returning to menu.") != std::string::npos);
 }
 

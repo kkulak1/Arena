@@ -1,8 +1,5 @@
 #include <catch2/catch_test_macros.hpp>
 
-#include <cstdlib>
-#include <ctime>
-
 #include "TestCharacter.h"
 #include "character/Character.h"
 
@@ -34,21 +31,35 @@ TEST_CASE("Character::getMaxHp to wartosc poczatkowa HP", "[character]") {
     REQUIRE(c.getMaxHp() == 123);
 }
 
-TEST_CASE("Character::attackTarget nie zadaje ujemnych obrazen (attack < defense)", "[character]") {
-    TestCharacter attacker("Att", 1, 100, /*attack*/ 1, /*defense*/ 0, /*crit*/ 0.0, /*dodge*/ 0.0);
-    TestCharacter target("Tgt", 2, 100, /*attack*/ 10, /*defense*/ 99, /*crit*/ 0.0, /*dodge*/ 0.0);
+TEST_CASE("Character::defend redukuje pierwsze otrzymane obrazenia", "[character]") {
+    TestCharacter c("A", 1, 100);
 
-    attacker.attackTarget(target);
-    REQUIRE(target.getHp() == 100);
+    c.defend();
+    c.takeDamage(9);
+    REQUIRE(c.getHp() == 91);
+
+    c.takeDamage(9);
+    REQUIRE(c.getHp() == 82);
 }
 
-TEST_CASE("Character::attackTarget zadaje obrazenia = attack - defense (bez crit/dodge)", "[character]") {
+TEST_CASE("Character cooldown speciala odlicza sie poprawnie", "[character]") {
+    TestCharacter c("A");
+    c.configureSpecialCooldown(2);
 
-    TestCharacter attacker("Att", 1, 100, /*attack*/ 10, /*defense*/ 0, /*crit*/ 0.0, /*dodge*/ 0.0);
-    TestCharacter target("Tgt", 2, 100, /*attack*/ 10, /*defense*/ 3, /*crit*/ 0.0, /*dodge*/ 0.0);
+    REQUIRE(c.canUseSpecial());
+    REQUIRE(c.getSpecialCooldownRemaining() == 0);
 
-    attacker.attackTarget(target);
-    REQUIRE(target.getHp() == 93);
+    c.startSpecialCooldown();
+    REQUIRE_FALSE(c.canUseSpecial());
+    REQUIRE(c.getSpecialCooldownRemaining() == 2);
+
+    c.tickSpecialCooldown();
+    REQUIRE(c.getSpecialCooldownRemaining() == 1);
+    REQUIRE_FALSE(c.canUseSpecial());
+
+    c.tickSpecialCooldown();
+    REQUIRE(c.getSpecialCooldownRemaining() == 0);
+    REQUIRE(c.canUseSpecial());
 }
 
 

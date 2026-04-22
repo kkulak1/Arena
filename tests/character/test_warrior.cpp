@@ -13,3 +13,21 @@ TEST_CASE("Warrior: konstruktor ustawia statystyki bazowe", "[character][warrior
     REQUIRE(w.getAttack() == 18);
     REQUIRE(w.getDefense() == 10);
 }
+
+TEST_CASE("Warrior::specialAbility zadaje podwojony attack", "[character][warrior]") {
+    Warrior w("W");
+    TestCharacter target("T", 2, 100, 10, 999, 0.0, 0.0);
+
+    REQUIRE(w.specialAbility(target) == w.getAttack() * 2);
+}
+
+TEST_CASE("Warrior ma cooldown speciala rowny 3 tury", "[character][warrior]") {
+    Warrior w("W");
+
+    w.startSpecialCooldown();
+    REQUIRE(w.getSpecialCooldownRemaining() == 3);
+
+    w.tickSpecialCooldown();
+    REQUIRE(w.getSpecialCooldownRemaining() == 2);
+}
+

@@ -5,7 +5,6 @@
 #ifndef ARENA_HUMANCONTROLLER_H
 #define ARENA_HUMANCONTROLLER_H
 #include "Controller.h"
-#include "../types/EAction.h"
 
 
 class HumanController : public Controller {

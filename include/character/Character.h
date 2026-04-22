@@ -19,11 +19,16 @@ private:
     double critChance;
     bool defending;
     double dodgeChance;
+    int specialCooldownTurns = 0;
+    int specialCooldownRemaining = 0;
+
+protected:
+    void setSpecialCooldownTurns(int turns);
 
 public:
     Character(std::string name, int teamId, int hp, int attack, int defense, double critChance, double dodgeChance);
     virtual ~Character() = default;
-    virtual void specialAbility(Character& target) = 0;
+    virtual int specialAbility(const Character& target) = 0;
 
     std::string getName() const;
     int getTeamId() const;
@@ -36,11 +41,15 @@ public:
     double getCritChance() const;
     bool isDefending() const;
     bool isAlive() const;
+    void setDefend(bool defending);
     void defend();
     void takeDamage(int damage);
-    void attackTarget(Character& target);
     void setHealth(int h);
     void setAttack(int a);
+    bool canUseSpecial() const;
+    void tickSpecialCooldown();
+    void startSpecialCooldown();
+    int getSpecialCooldownRemaining() const;
     virtual ECharacterType getCharacterType() const = 0;
 };
 

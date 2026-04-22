@@ -139,6 +139,31 @@ TEST_CASE("SaveManager::chooseSave odrzuca wybor spoza zakresu", "[save_manager]
     }
 }
 
+TEST_CASE("SaveManager::chooseSave odrzuca nienumeryczny wybor", "[save_manager]") {
+    ScopedCurrentPath cwd;
+    std::filesystem::create_directories("saves");
+    std::ofstream("saves/only_slot.txt") << "dummy";
+
+    ScopedCin input("abc\n");
+    ScopedCout captured;
+
+    const std::string selected = SaveManager::chooseSave();
+
+    REQUIRE(selected.empty());
+    REQUIRE(captured.str().find("Invalid choice!") != std::string::npos);
+}
+
+TEST_CASE("SaveManager::chooseSave akceptuje wybor z bialymi znakami", "[save_manager]") {
+    ScopedCurrentPath cwd;
+    std::filesystem::create_directories("saves");
+    std::ofstream("saves/only_slot.txt") << "dummy";
+
+    ScopedCin input("   1   \n");
+    const std::string selected = SaveManager::chooseSave();
+
+    REQUIRE(selected == (std::filesystem::current_path() / "saves" / "only_slot.txt").string());
+}
+
 TEST_CASE("SaveManager::loadGame zwraca domyslny stan gdy nie wybrano pliku", "[save_manager]") {
     ScopedCurrentPath cwd;
     ScopedCin input("1\n");

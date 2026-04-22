@@ -7,6 +7,7 @@
 #include <iostream>
 #include <limits>
 
+#include "ConsoleRenderer.h"
 #include "../include/Arena.h"
 #include "../include/SaveManager.h"
 #include "../include/character/Archer.h"
@@ -39,6 +40,15 @@ namespace {
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         return false;
+    }
+
+    Character* createCharacterFromChoice(int choice) {
+        switch (choice) {
+            case 1: return new Warrior("Warrior");
+            case 2: return new Mage("Mage");
+            case 3: return new Archer("Archer");
+            default: return new Warrior("Warrior");
+        }
     }
 }
 
@@ -113,22 +123,12 @@ Character *Game::createCharacter(int playerNumber) {
         return fallback;
     }
 
-    Character* character = nullptr;
-    switch (choice) {
-        case 1:
-            character = new Warrior("Warrior");
-            break;
-        case 2:
-            character = new Mage("Mage");
-            break;
-        case 3:
-            character = new Archer("Archer");
-            break;
-        default:
-            ConsoleRenderer::printMessage("Invalid choice, defaulting to Warrior.\n", Color::Default);
-            character = new Warrior("Warrior");
-            break;
+    if (choice < 1 || choice > 3) {
+        ConsoleRenderer::printMessage("Invalid choice, defaulting to Warrior.\n", Color::Default);
+        choice = 1;
     }
+
+    Character* character = createCharacterFromChoice(choice);
 
     if (character) character->setTeamId(playerNumber);
     return character;

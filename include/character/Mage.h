@@ -11,7 +11,7 @@ class Mage : public Character {
 public:
     Mage(std::string name);
     ECharacterType getCharacterType() const override;
-    void specialAbility(Character &target) override;
+    int specialAbility(const Character &target) override;
 };
 
 #endif //ARENA_MAGE_H
