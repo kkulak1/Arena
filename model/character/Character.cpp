@@ -3,10 +3,8 @@
 //
 
 #include "../../include/character/Character.h"
-#include "../../include/ConsoleRenderer.h"
-#include "../../include/types/Color.h"
+#include "../../include/templates/MathClamp.h"
 
-#include <string>
 #include <utility>
 
 Character::Character(std::string name, int teamId, int hp, int attack, int defense, double critChance, double dodgeChance)
@@ -21,46 +19,18 @@ Character::Character(std::string name, int teamId, int hp, int attack, int defen
     dodgeChance(dodgeChance)
     {}
 
+void Character::setDefend(bool isDefending) {
+    defending = isDefending;
+}
+
 void Character::defend() {
     defending = true;
 }
 
 void Character::takeDamage(int damage) {
-    if (defending) {
-        damage /= 2;
-        defending = false;
-    }
-
     hp -= damage;
-
-    if (hp < 0) {
-        hp = 0;
-    }
+    hp = clampMin(hp, 0);
 }
-
-void Character::attackTarget(Character &target) {
-    double dodgeRoll = (double) rand() / RAND_MAX;
-    if (dodgeRoll < target.getDodgeChance()) {
-        ConsoleRenderer::printMessage(target.getName() + " dodged the attack!", Color::Default, &target);
-        return;
-    }
-
-    int damage = getAttack() - target.getDefense();
-
-    if (damage < 0) {
-        damage = 0;
-    }
-
-    if (double critRoll = (double) rand() / RAND_MAX; critRoll < critChance) {
-        damage *= 2;
-        ConsoleRenderer::printMessage("Critical hit", Color::Default);
-    }
-
-    target.takeDamage(damage);
-
-    ConsoleRenderer::printMessage(name + " deals " + std::to_string(damage) + " damage to " + target.getName(), Color::Default, this);
-}
-
 
 void Character::setHealth(int h) {
     hp = h;
@@ -68,6 +38,28 @@ void Character::setHealth(int h) {
 
 void Character::setAttack(int a) {
     attack = a;
+}
+
+bool Character::canUseSpecial() const {
+    return specialCooldownRemaining == 0;
+}
+
+void Character::tickSpecialCooldown() {
+    if (specialCooldownRemaining > 0) {
+        --specialCooldownRemaining;
+    }
+}
+
+void Character::startSpecialCooldown() {
+    specialCooldownRemaining = specialCooldownTurns;
+}
+
+int Character::getSpecialCooldownRemaining() const {
+    return specialCooldownRemaining;
+}
+
+void Character::setSpecialCooldownTurns(int turns) {
+    specialCooldownTurns = clampMin(turns, 0);
 }
 
 int Character::getAttack() const {

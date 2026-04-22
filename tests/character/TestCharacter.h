@@ -18,7 +18,9 @@ public:
                            double dodgeChance = 0.0)
         : Character(std::move(name), teamId, hp, attack, defense, critChance, dodgeChance) {}
 
-    void specialAbility(Character&) override {}
+    int specialAbility(const Character&) override { return 0; }
+
+    void configureSpecialCooldown(int turns) { setSpecialCooldownTurns(turns); }
 
     [[nodiscard]] ECharacterType getCharacterType() const override {
         return ECharacterType::WARRIOR;

@@ -3,22 +3,20 @@
 //
 
 #include "../../include/character/Archer.h"
-#include "../../include/ConsoleRenderer.h"
-#include "../../include/types/Color.h"
+#include "../../include/templates/MathClamp.h"
 
 #include <utility>
 
 Archer::Archer(std::string name)
-    : Character(std::move(name), 1, 90, 16, 6, 0.25, 0.20) {}
+    : Character(std::move(name), 1, 90, 16, 6, 0.25, 0.20) {
+    setSpecialCooldownTurns(2);
+}
 
 ECharacterType Archer::getCharacterType() const {
     return ECharacterType::ARCHER;
 }
 
-void Archer::specialAbility(Character &target) {
-    ConsoleRenderer::printMessage(getName() + " uses DOUBLE SHOT!" , Color::Default, this);
-    ConsoleRenderer::printMessage(getName() + " shoots the first arrow!", Color::Default, this);
-    attackTarget(target);
-    ConsoleRenderer::printMessage(getName() + " shoots the second arrow!", Color::Default, this);
-    attackTarget(target);
+int Archer::specialAbility(const Character &target) {
+    const int singleShotDamage = clampMin(getAttack() - target.getDefense(), 0);
+    return singleShotDamage * 2 + target.getDefense();
 }

@@ -15,3 +15,25 @@ TEST_CASE("Archer: konstruktor ustawia statystyki bazowe", "[character][archer]"
     REQUIRE(a.getAttack() == 16);
     REQUIRE(a.getDefense() == 6);
 }
+
+TEST_CASE("Archer::specialAbility to podwojone obrazenia pojedynczego strzalu", "[character][archer]") {
+    Archer a("A");
+    TestCharacter target("T", 2, 100, 1, 6, 0.0, 0.0);
+
+    REQUIRE(a.specialAbility(target) == (a.getAttack() - target.getDefense()) * 2);
+}
+
+TEST_CASE("Archer::specialAbility nie schodzi ponizej zera", "[character][archer]") {
+    Archer a("A");
+    TestCharacter target("T", 2, 100, 1, 100, 0.0, 0.0);
+
+    REQUIRE(a.specialAbility(target) == 0);
+}
+
+TEST_CASE("Archer ma cooldown speciala rowny 2 tury", "[character][archer]") {
+    Archer a("A");
+
+    a.startSpecialCooldown();
+    REQUIRE(a.getSpecialCooldownRemaining() == 2);
+}
+
