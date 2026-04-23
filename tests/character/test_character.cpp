@@ -51,7 +51,11 @@ TEST_CASE("Character cooldown speciala odlicza sie poprawnie", "[character]") {
 
     c.startSpecialCooldown();
     REQUIRE_FALSE(c.canUseSpecial());
+    REQUIRE(c.getSpecialCooldownRemaining() == 3);
+
+    c.tickSpecialCooldown();
     REQUIRE(c.getSpecialCooldownRemaining() == 2);
+    REQUIRE_FALSE(c.canUseSpecial());
 
     c.tickSpecialCooldown();
     REQUIRE(c.getSpecialCooldownRemaining() == 1);

@@ -7,6 +7,7 @@
 #include "types/TurnDecision.h"
 #include "character/Character.h"
 #include "controller/Controller.h"
+#include "types/GameState.h"
 
 class Arena {
 private:
@@ -20,12 +21,12 @@ private:
     bool shouldExit = false;
 
     static int applyDamage(Character& defender, int damage);
-    void saveCurrentGame() const;
 
 public:
     Arena(Character* p1, Character* p2, Controller* c1, Controller* c2, int startTurn = 1, int mode = 2, int aiDifficulty = 1);
 
-    void startGame();
+    EGameCommand step();
+    GameState getState() const;
     void executeTurn(Character& attacker, Character& defender, Controller* controller);
     void executeAction(EAction action, Character& attacker, Character& defender);
 

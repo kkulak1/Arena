@@ -24,16 +24,16 @@ int EasyAIController::getSpecialActionWeight() const {
 }
 
 EAction EasyAIController::chooseAction(Character &self, Character &enemy) {
-    std::vector<std::pair<EasyMode, int>> mode = {
+    std::vector<std::pair<EasyMode, int>> mode = {      // 60% akcji jest losowa
         {EasyMode::RANDOM, 60},
         {EasyMode::NORMAL, 40}
     };
 
     if (pickWeightedRandom(mode, EasyMode::NORMAL) == EasyMode::RANDOM) {
         std::vector<std::pair<EAction, int>> randomActions = {
-            {EAction::ATTACK, 3},
-            {EAction::DEFEND, 4},
-            {EAction::SPECIAL, 1}
+            {EAction::ATTACK, getAttackWeight()},
+            {EAction::DEFEND, getDefendWeight()},
+            {EAction::SPECIAL, getSpecialActionWeight()}
         };
         return pickWeightedRandom(randomActions, EAction::ATTACK);
     }

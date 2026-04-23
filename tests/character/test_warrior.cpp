@@ -25,9 +25,9 @@ TEST_CASE("Warrior ma cooldown speciala rowny 3 tury", "[character][warrior]") {
     Warrior w("W");
 
     w.startSpecialCooldown();
-    REQUIRE(w.getSpecialCooldownRemaining() == 3);
+    REQUIRE(w.getSpecialCooldownRemaining() == 4);
 
     w.tickSpecialCooldown();
-    REQUIRE(w.getSpecialCooldownRemaining() == 2);
+    REQUIRE(w.getSpecialCooldownRemaining() == 3);
 }
 

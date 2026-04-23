@@ -9,7 +9,7 @@
 #include "EGameCommand.h"
 
 struct TurnDecision {
-    EGameCommand command = EGameCommand::NONE;
+    EGameCommand command = EGameCommand::CONTINUE;
     EAction action = EAction::ATTACK;
 };
 

@@ -14,7 +14,7 @@ TEST_CASE("EasyAIController: decideTurn zwraca jedna z akcji (ATTACK/DEFEND/SPEC
 
     TurnDecision d = c.decideTurn(self, enemy);
 
-    REQUIRE(d.command == EGameCommand::NONE);
+    REQUIRE(d.command == EGameCommand::CONTINUE);
     REQUIRE((d.action == EAction::ATTACK || d.action == EAction::DEFEND || d.action == EAction::SPECIAL));
 }
 

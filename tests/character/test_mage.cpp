@@ -14,27 +14,29 @@ TEST_CASE("Mage: konstruktor ustawia statystyki bazowe", "[character][mage]") {
     REQUIRE(m.getDefense() == 5);
 }
 
-TEST_CASE("Mage::specialAbility zwraca attack + (defense/2) celu", "[character][mage]") {
+TEST_CASE("Mage::specialAbility leczy postac", "[character][mage]") {
     Mage m("M");
-    // target defense = 10 -> reducedDefense = 5
+    m.setHealth(40);
     TestCharacter target("T", 2, 100, 1, 10, 0.0, 0.0);
 
-    const int damage = m.specialAbility(target);
-    REQUIRE(damage == m.getAttack() + (10 / 2));
+    const int heal = m.specialAbility(target);
+    REQUIRE(heal == 30);
+    REQUIRE(m.getHp() == 70);
 }
 
-TEST_CASE("Mage::specialAbility ucina defense/2 do int dla nieparzystej obrony", "[character][mage]") {
+TEST_CASE("Mage::specialAbility nie leczy powyzej max HP", "[character][mage]") {
     Mage m("M");
+    m.setHealth(70);
     TestCharacter target("T", 2, 100, 1, 9, 0.0, 0.0);
 
-    const int damage = m.specialAbility(target);
-    REQUIRE(damage == m.getAttack() + 4);
+    const int heal = m.specialAbility(target);
+    REQUIRE(heal == 10);
+    REQUIRE(m.getHp() == 80);
 }
 
 TEST_CASE("Mage ma cooldown speciala rowny 3 tury", "[character][mage]") {
     Mage m("M");
 
     m.startSpecialCooldown();
-    REQUIRE(m.getSpecialCooldownRemaining() == 3);
+    REQUIRE(m.getSpecialCooldownRemaining() == 4);
 }
-

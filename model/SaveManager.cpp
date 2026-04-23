@@ -38,15 +38,19 @@ namespace {
         return saveDir;
     }
 
-    Character* createCharacterFromString(const std::string& type) {
-        if (type == "Warrior") return new Warrior(type);
-        if (type == "Mage") return new Mage(type);
-        if (type == "Archer") return new Archer(type);
+    std::unique_ptr<Character> createCharacterFromString(const std::string& type) {
+        if (type == "Warrior") return std::make_unique<Warrior>(type);
+        if (type == "Mage") return std::make_unique<Mage>(type);
+        if (type == "Archer") return std::make_unique<Archer>(type);
         return nullptr;
     }
 }
 
-void SaveManager::saveGame(Character *p1, Character *p2, int turn, int mode, int aiDifficulty, const std::string& filename) {
+void SaveManager::saveGame(Character *p1, Character *p2, int turn, int mode, int aiDifficulty) {
+    std::string filename;
+    ConsoleRenderer::printMessage("Enter filename to save the game:", Color::Default);
+    std::cin >> filename;
+
     const std::filesystem::path filePath = getSaveDir() / (filename + ".txt");
     std::ofstream file(filePath);
     if (!file) {
@@ -78,15 +82,11 @@ std::string SaveManager::chooseSave() {
     }
 
     ConsoleRenderer::printMessage("\nChoose a save to load:", Color::Default);
-    if (!(std::cin >> choice)) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        ConsoleRenderer::printMessage("Invalid choice!", Color::Default);
-        return "";
-    }
+    bool valid = static_cast<bool>(std::cin >> choice);
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');     //TODO: duplication
-    if (choice < 1 || choice > saves.size()) {
+    if (!valid || choice < 1 || choice > saves.size()) {
         ConsoleRenderer::printMessage("Invalid choice!", Color::Default);
         return "";
     }
@@ -122,8 +122,6 @@ GameState SaveManager::loadGame() {
     if (state.p1 == nullptr || state.p2 == nullptr) {
         ConsoleRenderer::printMessage("Save file contains unknown character type(s): " + data.type1 + ", " + data.type2,
                                       Color::Default);
-        delete state.p1;
-        delete state.p2;
         return {};
     }
 

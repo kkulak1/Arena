@@ -16,6 +16,12 @@ ECharacterType Mage::getCharacterType() const {
 }
 
 int Mage::specialAbility(const Character &target) {
-    int reducedDefense = target.getDefense() / 2;
-    return getAttack() + reducedDefense;
+    int healAmount = 30; // base heal amount
+    int previousHp = getHp();
+    int newHp = previousHp + healAmount;
+    if (newHp > getMaxHp()) {
+        newHp = getMaxHp();
+    }
+    setHealth(newHp);
+    return newHp - previousHp;
 }

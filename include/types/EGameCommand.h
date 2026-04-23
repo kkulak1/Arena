@@ -6,8 +6,9 @@
 #define ARENA_EGAMECOMMAND_H
 
 enum class EGameCommand {
-    NONE,
-    SAVE_AND_EXIT
+    CONTINUE,
+    SAVE_AND_EXIT,
+    GAME_OVER
 };
 
 #endif //ARENA_EGAMECOMMAND_H
