@@ -184,11 +184,9 @@ void Game::startGame() {
 
     while (true) {
         int menu = showMenu();
-
         if (menu == -1) {   // fallback
             continue;
         }
-
         if (menu == 3) {    // exit
             ConsoleRenderer::printMessage("Exiting game. Goodbye!\n", Color::Default);
             return;
@@ -199,7 +197,6 @@ void Game::startGame() {
         int turn = 1;
         int mode = 2;
         int aiDifficulty = 1;
-
         std::unique_ptr<Controller> controller1 = std::make_unique<HumanController>();
         std::unique_ptr<Controller> controller2 = nullptr;
 
@@ -216,14 +213,27 @@ void Game::startGame() {
         if (!success) { //fallback
             continue;
         }
-
+        // GAME LOOP:
         Arena arena(player1.get(), player2.get(), controller1.get(), controller2.get(), turn, mode, aiDifficulty);
-        startMatch(&arena);
+        while (true) {
+            EGameCommand result = arena.step();
+            if (result == EGameCommand::SAVE_AND_EXIT) {
+                SaveManager::saveGame(
+                    player1.get(),
+                    player2.get(),
+                    turn,
+                    mode,
+                    aiDifficulty
+                );
+                ConsoleRenderer::printMessage("Game saved. Exiting...\n", Color::Default);
+                break;
+            }
 
+            if (result == EGameCommand::GAME_OVER) {
+                ConsoleRenderer::printMessage("Game over!\n", Color::Default);
+                break;
+            }
+        }
         return;
     }
-}
-
-void Game::startMatch(Arena *arena) {
-    arena->startGame();
 }

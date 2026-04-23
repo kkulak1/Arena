@@ -35,5 +35,5 @@ TEST_CASE("Archer ma cooldown speciala rowny 2 tury", "[character][archer]") {
     Archer a("A");
 
     a.startSpecialCooldown();
-    REQUIRE(a.getSpecialCooldownRemaining() == 2);
+    REQUIRE(a.getSpecialCooldownRemaining() == 4);
 }

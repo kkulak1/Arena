@@ -51,7 +51,7 @@ void Character::tickSpecialCooldown() {
 }
 
 void Character::startSpecialCooldown() {
-    specialCooldownRemaining = specialCooldownTurns;
+    specialCooldownRemaining = specialCooldownTurns + 1; // +1 przez ture w ktorej wywolany zostal special
 }
 
 int Character::getSpecialCooldownRemaining() const {

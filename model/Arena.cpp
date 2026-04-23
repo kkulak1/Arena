@@ -55,42 +55,53 @@ void Arena::printStatus() const {
     ConsoleRenderer::printPlayer(*player2);
 }
 
-void Arena::startGame() {
-    while (player1->isAlive() && player2-> isAlive()) {
-        printStatus();
+EGameCommand Arena::step() {
+    printStatus();
 
-        executeTurn(*player1, *player2, controller1);
-        if (shouldExit) return;
-        if (!player2->isAlive()) break;
+    executeTurn(*player1, *player2, controller1);
+    if (shouldExit) return EGameCommand::SAVE_AND_EXIT;
 
-        executeTurn(*player2, *player1, controller2);
-        if (shouldExit) return;
-        if (!player1->isAlive()) break;
-
-        turn++;
-    }
-
-    ConsoleRenderer::printMessage("\nGame Over! ", Color::Default);
-    if (player1->isAlive()) {
+    if (!player2->isAlive()) {
         ConsoleRenderer::printMessage(player1->getName() + " wins!", Color::Default, player1);
-    } else {
-        ConsoleRenderer::printMessage(player2->getName() + " wins!", Color::Default, player2);
+        return EGameCommand::GAME_OVER;
     }
+
+    executeTurn(*player2, *player1, controller2);
+    if (shouldExit) return EGameCommand::SAVE_AND_EXIT;
+
+    if (!player1->isAlive()) {
+        ConsoleRenderer::printMessage(player2->getName() + " wins!", Color::Default, player2);
+        return EGameCommand::GAME_OVER;
+    }
+
+    turn++;
+    return EGameCommand::CONTINUE;
+}
+
+GameState Arena::getState() const {
+    GameState state;
+
+    state.p1 = nullptr;
+    state.p2 = nullptr;
+
+    state.turn = turn;
+    state.mode = mode;
+    state.aiDifficulty = aiDifficulty;
+
+    return state;
 }
 
 void Arena::executeTurn(Character &attacker, Character &defender, Controller* controller) {
     attacker.setDefend(false);  // zerowanie obrony przed kolejna akcja
-    attacker.tickSpecialCooldown();
 
     TurnDecision decision = controller->decideTurn(attacker, defender);
     if (decision.command == EGameCommand::SAVE_AND_EXIT) {
-        saveCurrentGame();
-        ConsoleRenderer::printMessage("Exiting...", Color::Default);
         shouldExit = true;
         return;
     }
 
     executeAction(decision.action, attacker, defender);
+    attacker.tickSpecialCooldown();
 }
 
 void Arena::executeAction(EAction action, Character &attacker, Character &defender) {
@@ -178,9 +189,4 @@ int Arena::applyDamage(Character &defender, int damage) {
     const int hpBefore = defender.getHp();
     defender.takeDamage(finalDamage);
     return hpBefore - defender.getHp();
-}
-
-
-void Arena::saveCurrentGame() const {
-    SaveManager::saveGame(player1, player2, turn, mode, aiDifficulty);
 }
