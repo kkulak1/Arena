@@ -20,7 +20,7 @@ TEST_CASE("AIController::decideTurn zwraca decyzje z chooseAction", "[controller
 
     TurnDecision d = c.decideTurn(self, enemy);
 
-    REQUIRE(d.command == EGameCommand::NONE);
+    REQUIRE(d.command == EGameCommand::CONTINUE);
     REQUIRE((d.action == EAction::ATTACK || d.action == EAction::DEFEND || d.action == EAction::SPECIAL));
 }
 

@@ -46,7 +46,11 @@ namespace {
     }
 }
 
-void SaveManager::saveGame(Character *p1, Character *p2, int turn, int mode, int aiDifficulty, const std::string& filename) {
+void SaveManager::saveGame(Character *p1, Character *p2, int turn, int mode, int aiDifficulty) {
+    std::string filename;
+    ConsoleRenderer::printMessage("Enter filename to save the game:", Color::Default);
+    std::cin >> filename;
+
     const std::filesystem::path filePath = getSaveDir() / (filename + ".txt");
     std::ofstream file(filePath);
     if (!file) {

@@ -9,7 +9,7 @@
 
 Archer::Archer(std::string name)
     : Character(std::move(name), 1, 90, 16, 6, 0.25, 0.20) {
-    setSpecialCooldownTurns(2);
+    setSpecialCooldownTurns(3);
 }
 
 ECharacterType Archer::getCharacterType() const {

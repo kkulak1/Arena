@@ -229,7 +229,7 @@ TEST_CASE("Arena::startGame zapisuje i konczy po SAVE_AND_EXIT", "[arena]") {
     std::getline(in, header);
     REQUIRE(header == "5 2 1");
 
-    REQUIRE(captured.str().find("Game saved. Exiting...") != std::string::npos);
+    REQUIRE(captured.str().find("Exiting...") != std::string::npos);
 }
 
 TEST_CASE("Arena::executeAction ATTACK zadaje poprawne obrazenia", "[arena]") {

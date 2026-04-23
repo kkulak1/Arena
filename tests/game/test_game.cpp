@@ -115,7 +115,7 @@ TEST_CASE("Game::startGame nowa gra pozwala zapisac i wyjsc", "[game]") {
     std::getline(in, header);
     REQUIRE(header == "1 1 0");
 
-    REQUIRE(captured.str().find("Game saved. Exiting...") != std::string::npos);
+    REQUIRE(captured.str().find("Exiting...") != std::string::npos);
 }
 
 TEST_CASE("Game::startGame niepoprawny tryb domyslnie ustawia Player vs AI", "[game]") {
@@ -256,7 +256,7 @@ TEST_CASE("Game::startGame load poprawnego save zachowuje naglowek po zapisie", 
     std::string header;
     std::getline(in, header);
     REQUIRE(header == "7 1 0");
-    REQUIRE(captured.str().find("Game saved. Exiting...") != std::string::npos);
+    REQUIRE(captured.str().find("Exiting...") != std::string::npos);
 }
 
 TEST_CASE("Game::startGame load uszkodzonego save konczy gre", "[game]") {

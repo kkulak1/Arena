@@ -44,7 +44,7 @@ TEST_CASE("HumanController: wybiera ATTACK gdy uzytkownik wpisze 1", "[controlle
 
     TurnDecision d = c.decideTurn(self, enemy);
 
-    REQUIRE(d.command == EGameCommand::NONE);
+    REQUIRE(d.command == EGameCommand::CONTINUE);
     REQUIRE(d.action == EAction::ATTACK);
 }
 
@@ -58,7 +58,7 @@ TEST_CASE("HumanController: wybiera DEFEND gdy uzytkownik wpisze 2", "[controlle
 
     TurnDecision d = c.decideTurn(self, enemy);
 
-    REQUIRE(d.command == EGameCommand::NONE);
+    REQUIRE(d.command == EGameCommand::CONTINUE);
     REQUIRE(d.action == EAction::DEFEND);
 }
 
@@ -72,7 +72,7 @@ TEST_CASE("HumanController: wybiera SPECIAL gdy uzytkownik wpisze 3", "[controll
 
     TurnDecision d = c.decideTurn(self, enemy);
 
-    REQUIRE(d.command == EGameCommand::NONE);
+    REQUIRE(d.command == EGameCommand::CONTINUE);
     REQUIRE(d.action == EAction::SPECIAL);
 }
 
@@ -102,7 +102,7 @@ TEST_CASE("HumanController: gdy SPECIAL jest na cooldownie, wybor 3 daje ATTACK"
 
     TurnDecision d = c.decideTurn(self, enemy);
 
-    REQUIRE(d.command == EGameCommand::NONE);
+    REQUIRE(d.command == EGameCommand::CONTINUE);
     REQUIRE(d.action == EAction::ATTACK);
     REQUIRE(out.str().find("Special ability is on cooldown") != std::string::npos);
 }
@@ -118,7 +118,7 @@ TEST_CASE("HumanController: niepoprawny input domyslnie ATTACK", "[controller][h
     TurnDecision d = c.decideTurn(self, enemy);
 
 
-    REQUIRE(d.command == EGameCommand::NONE);
+    REQUIRE(d.command == EGameCommand::CONTINUE);
     REQUIRE(d.action == EAction::ATTACK);
 }
 
@@ -132,7 +132,7 @@ TEST_CASE("HumanController: litera nie przeskakuje tury, tylko ponawia wybor", "
 
     TurnDecision d = c.decideTurn(self, enemy);
 
-    REQUIRE(d.command == EGameCommand::NONE);
+    REQUIRE(d.command == EGameCommand::CONTINUE);
     REQUIRE(d.action == EAction::DEFEND);
 }
 
@@ -159,7 +159,7 @@ TEST_CASE("HumanController: EOF domyslnie wybiera ATTACK", "[controller][human]"
 
     TurnDecision d = c.decideTurn(self, enemy);
 
-    REQUIRE(d.command == EGameCommand::NONE);
+    REQUIRE(d.command == EGameCommand::CONTINUE);
     REQUIRE(d.action == EAction::ATTACK);
 }
 
@@ -173,7 +173,7 @@ TEST_CASE("HumanController: liczba z ogonem tekstowym nadal czyta liczbe", "[con
 
     TurnDecision d = c.decideTurn(self, enemy);
 
-    REQUIRE(d.command == EGameCommand::NONE);
+    REQUIRE(d.command == EGameCommand::CONTINUE);
     REQUIRE(d.action == EAction::DEFEND);
 }
 

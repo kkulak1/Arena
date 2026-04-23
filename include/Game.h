@@ -11,7 +11,7 @@
 
 class Game {
 private:
-    int showMenu();
+    static int showMenu();
     int chooseMode();
     std::unique_ptr<Controller> chooseAIDifficulty();
     std::unique_ptr<Character> createCharacter(int playerNumber);

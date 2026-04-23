@@ -17,11 +17,10 @@
 #include "../include/controller/HardAIController.h"
 #include "../include/controller/HumanController.h"
 #include "windows.h"
-#include <cstdlib>
 #include <ctime>
 
 namespace {
-    void enableANSI() {     // enables colors
+    void enableANSI() {     // aktywuje kolory w terminalu
         HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
         DWORD dwMode = 0;
         GetConsoleMode(hOut, &dwMode);
@@ -142,7 +141,7 @@ bool Game::handleLoadGame(std::unique_ptr<Character>& player1, std::unique_ptr<C
         ConsoleRenderer::printMessage("Load failed. Returning to menu.\n", Color::Default);
         return false;
     }
-    player1 = std::move(state.p1);    // kopiowanie jest zabronione przy uniqe_ptr
+    player1 = std::move(state.p1);    // kopiowanie jest zabronione przy uniqe_ptr -> move()
     player2 = std::move(state.p2);
     player1->setTeamId(1);
     player2->setTeamId(2);
@@ -186,11 +185,11 @@ void Game::startGame() {
     while (true) {
         int menu = showMenu();
 
-        if (menu == -1) {
+        if (menu == -1) {   // fallback
             continue;
         }
 
-        if (menu == 3) {
+        if (menu == 3) {    // exit
             ConsoleRenderer::printMessage("Exiting game. Goodbye!\n", Color::Default);
             return;
         }
@@ -214,7 +213,7 @@ void Game::startGame() {
             ConsoleRenderer::printMessage("Invalid menu choice. Please choose 1, 2 or 3.\n", Color::Default);
         }
 
-        if (!success) {
+        if (!success) { //fallback
             continue;
         }
 

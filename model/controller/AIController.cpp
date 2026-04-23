@@ -25,16 +25,17 @@ EAction AIController::chooseAction(Character &self, Character &enemy) {
     int defendScore = getDefendWeight();
     int specialScore = getSpecialActionWeight();
 
-    if (selfHp < 0.3) {
+    // Bonusy
+    if (selfHp < 0.3) {     // hp ponizej 30%
         defendScore += LOW_HP_DEFEND_BONUS;
     }
-    if (enemyHp < 0.25) {
+    if (enemyHp < 0.25) {   // hp przeciwnika ponizej 25%
         attackScore += LOW_ENEMY_HP_ATTACK_BONUS;
     }
-    if (specialAvailable && selfHp > 0.5 && enemyHp > 0.33) {
+    if (specialAvailable && selfHp > 0.5 && enemyHp > 0.33) {   // Bonus do umiejętności specjalnej w środku gry
         specialScore += MID_GAME_SPECIAL_BONUS;
     }
-    if (!specialAvailable) {
+    if (!specialAvailable || (self.getCharacterType() == ECharacterType::MAGE && selfHp > 0.8)) {   // Jeśli specjalna umiejętność jest niedostępna lub postać to Mage z wysokim HP
         specialScore = 0;
     }
 
