@@ -120,7 +120,7 @@ TEST_CASE("Game::startGame nowa gra pozwala zapisac i wyjsc", "[game]") {
 
 TEST_CASE("Game::startGame niepoprawny tryb domyslnie ustawia Player vs AI", "[game]") {
     ScopedCurrentPath cwd;
-    ScopedCin input("1\n9\n1\n1\n1\n4\nmode_default\n");
+    ScopedCin input("1\n9\n1\n1\n4\nmode_default\n");
     ScopedCout captured;
 
     Game game;
@@ -138,7 +138,7 @@ TEST_CASE("Game::startGame niepoprawny tryb domyslnie ustawia Player vs AI", "[g
 
 TEST_CASE("Game::startGame nienumeryczny tryb domyslnie ustawia Player vs AI", "[game]") {
     ScopedCurrentPath cwd;
-    ScopedCin input("1\nabc\n1\n1\n1\n4\nmode_alpha\n");
+    ScopedCin input("1\nabc\n1\n1\n4\nmode_alpha\n");
     ScopedCout captured;
 
     Game game;
@@ -156,7 +156,7 @@ TEST_CASE("Game::startGame nienumeryczny tryb domyslnie ustawia Player vs AI", "
 
 TEST_CASE("Game::startGame niepoprawna trudnosc AI domyslnie ustawia Easy", "[game]") {
     ScopedCurrentPath cwd;
-    ScopedCin input("1\n2\n1\n1\n9\n4\nai_default\n");
+    ScopedCin input("1\n2\n1\n9\n4\nai_default\n");
     ScopedCout captured;
 
     Game game;
@@ -174,7 +174,7 @@ TEST_CASE("Game::startGame niepoprawna trudnosc AI domyslnie ustawia Easy", "[ga
 
 TEST_CASE("Game::startGame nienumeryczna trudnosc AI domyslnie ustawia Easy", "[game]") {
     ScopedCurrentPath cwd;
-    ScopedCin input("1\n2\n1\n1\nq\n4\nai_alpha\n");
+    ScopedCin input("1\n2\n1\nq\n4\nai_alpha\n");
     ScopedCout captured;
 
     Game game;
@@ -284,4 +284,3 @@ TEST_CASE("Game::startGame load save z nieznanym typem postaci konczy gre", "[ga
     REQUIRE(captured.str().find("unknown character type") != std::string::npos);
     REQUIRE(captured.str().find("Load failed. Returning to menu.") != std::string::npos);
 }
-

@@ -22,7 +22,7 @@ namespace {
             case ECharacterType::WARRIOR:
                 return "POWER STRIKE";
             case ECharacterType::MAGE:
-                return "FIREBALL";
+                return "HEAL";
             case ECharacterType::ARCHER:
                 return "DOUBLE SHOT";
             default:
@@ -85,7 +85,7 @@ void Arena::executeTurn(Character &attacker, Character &defender, Controller* co
     TurnDecision decision = controller->decideTurn(attacker, defender);
     if (decision.command == EGameCommand::SAVE_AND_EXIT) {
         saveCurrentGame();
-        ConsoleRenderer::printMessage("Game saved. Exiting...", Color::Default);
+        ConsoleRenderer::printMessage("Exiting...", Color::Default);
         shouldExit = true;
         return;
     }
@@ -122,7 +122,7 @@ void Arena::applyAttack(Character &attacker, Character &defender) {
     const int damage = calculatedDamage(attacker, defender,
         [](int base, const Character& currentAttacker, const Character&) {
             if (double critRoll = static_cast<double>(rand()) / RAND_MAX; critRoll < currentAttacker.getCritChance()) {
-                ConsoleRenderer::printMessage("Critical hit", Color::Default);
+                ConsoleRenderer::printMessage("Critical hit", Color::Default, &currentAttacker);
                 return base * 2;
             }
             return base;
@@ -147,6 +147,13 @@ void Arena::applySpecialAbility(Character &attacker, Character &defender) {
 
     const std::string specialName = getSpecialName(attacker);
     ConsoleRenderer::printMessage(attacker.getName() + " uses " + specialName + "!", Color::Default, &attacker);
+
+    if (attacker.getCharacterType() == ECharacterType::MAGE) {
+        int healAmount = attacker.specialAbility(defender);
+        attacker.startSpecialCooldown();
+        ConsoleRenderer::printMessage(attacker.getName() + " heals for " + std::to_string(healAmount) + " HP!", Color::Default, &attacker);
+        return;
+    }
 
     const int rawSpecialDamage = attacker.specialAbility(defender);
     const int specialDamage = calculatedDamageFromBase(rawSpecialDamage, attacker, defender,

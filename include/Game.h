@@ -13,9 +13,12 @@ class Game {
 private:
     int showMenu();
     int chooseMode();
-    Controller* chooseAIDifficulty();
-    Character* createCharacter(int playerNumber);
-    void startMatch(Arena* arena );
+    std::unique_ptr<Controller> chooseAIDifficulty();
+    std::unique_ptr<Character> createCharacter(int playerNumber);
+
+    static void startMatch(Arena* arena );
+    bool handleLoadGame(std::unique_ptr<Character>& player1, std::unique_ptr<Character>& player2, std::unique_ptr<Controller>& controller2, int& turn, int& mode, int& aiDifficulty);
+    void handleNewGame(std::unique_ptr<Character>& player1, std::unique_ptr<Character>& player2, std::unique_ptr<Controller>& controller2, int& mode, int& aiDifficulty);
 public:
     void startGame();
 };

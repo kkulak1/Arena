@@ -200,9 +200,6 @@ TEST_CASE("SaveManager::loadGame wczytuje poprawny zapis", "[save_manager]") {
     REQUIRE(toString(state.p2->getCharacterType()) == "Archer");
     REQUIRE(state.p1->getHp() == 88);
     REQUIRE(state.p2->getHp() == 61);
-
-    delete state.p1;
-    delete state.p2;
 }
 
 TEST_CASE("SaveManager::loadGame zwraca domyslny stan dla uszkodzonego pliku", "[save_manager]") {

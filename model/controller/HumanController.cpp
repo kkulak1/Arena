@@ -65,7 +65,7 @@ TurnDecision HumanController::decideTurn(Character &character, Character& enemy)
     ConsoleRenderer::printMessage("\n" + character.getName() + " choose action:", Color::Default, &character);
     printActionMenu(character);
     while (true) {
-        if (std::cin >> choice) {
+        if (std::cin >> choice && choice >= 1 && choice <= 4) {
             break;
         }
         if (std::cin.eof()) {
@@ -74,7 +74,7 @@ TurnDecision HumanController::decideTurn(Character &character, Character& enemy)
         }
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        ConsoleRenderer::printMessage("Invalid input. Please enter a number.", Color::Default, &character);
+        ConsoleRenderer::printMessage("Invalid input. Please enter a number between 1 and 4.", Color::Default, &character);
     }
 
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
