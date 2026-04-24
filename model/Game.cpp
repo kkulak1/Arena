@@ -178,6 +178,33 @@ void Game::handleNewGame(std::unique_ptr<Character>& player1, std::unique_ptr<Ch
     }
 }
 
+void Game::runGameLoop(Character *player1, Character *player2, Controller *controller1, Controller *controller2,
+    int &turn, int mode, int aiDifficulty) {
+    Arena arena(player1, player2, controller1, controller2, turn, mode, aiDifficulty);
+
+    while (true) {
+        EGameCommand result = arena.step();
+
+        if (result == EGameCommand::SAVE_AND_EXIT) {
+            SaveManager::saveGame(
+                player1,
+                player2,
+                turn,
+                mode,
+                aiDifficulty
+            );
+
+            ConsoleRenderer::printMessage("Game saved. Exiting...\n", Color::Default);
+            break;
+        }
+
+        if (result == EGameCommand::GAME_OVER) {
+            ConsoleRenderer::printMessage("Game over!\n", Color::Default);
+            break;
+        }
+    }
+}
+
 void Game::startGame() {
     enableANSI();
     std::srand(static_cast<unsigned>(std::time(nullptr)));
@@ -213,27 +240,7 @@ void Game::startGame() {
         if (!success) { //fallback
             continue;
         }
-        // GAME LOOP:
-        Arena arena(player1.get(), player2.get(), controller1.get(), controller2.get(), turn, mode, aiDifficulty);
-        while (true) {
-            EGameCommand result = arena.step();
-            if (result == EGameCommand::SAVE_AND_EXIT) {
-                SaveManager::saveGame(
-                    player1.get(),
-                    player2.get(),
-                    turn,
-                    mode,
-                    aiDifficulty
-                );
-                ConsoleRenderer::printMessage("Game saved. Exiting...\n", Color::Default);
-                break;
-            }
 
-            if (result == EGameCommand::GAME_OVER) {
-                ConsoleRenderer::printMessage("Game over!\n", Color::Default);
-                break;
-            }
-        }
-        return;
+        runGameLoop(player1.get(), player2.get(), controller1.get(), controller2.get(), turn,mode, aiDifficulty);
     }
 }
