@@ -7,18 +7,18 @@
 #include <vector>
 
 template<typename T>
-T pickWeightedRandom(const std::vector<std::pair<T, int>>& options, const T& fallback) {
+T pickWeightedRandom(const std::vector<std::pair<T, int>>& options, const T& fallback) {    // wektor par
     int totalWeight = 0;
 
-    for (const auto& [option, weight] : options) {
+    for (const auto& [option, weight] : options) {  //sumowanie wag
         totalWeight += weight;
     }
 
-    if (options.empty() || totalWeight <= 0) {
+    if (options.empty() || totalWeight <= 0) {  // fallback
         return fallback;
     }
 
-    int roll = rand() % totalWeight;
+    int roll = rand() % totalWeight;    // modulo [0, totalWeight]
 
     for (const auto& [option, weight] : options) {
         if (weight <= 0) {

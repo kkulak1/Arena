@@ -18,6 +18,7 @@ private:
 
     bool handleLoadGame(std::unique_ptr<Character>& player1, std::unique_ptr<Character>& player2, std::unique_ptr<Controller>& controller2, int& turn, int& mode, int& aiDifficulty);
     void handleNewGame(std::unique_ptr<Character>& player1, std::unique_ptr<Character>& player2, std::unique_ptr<Controller>& controller2, int& mode, int& aiDifficulty);
+    void runGameLoop(Character* player1, Character* player2, Controller* controller1, Controller* controller2, int& turn, int mode, int aiDifficulty);
 public:
     void startGame();
 };
